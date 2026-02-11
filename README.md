@@ -9,7 +9,7 @@ involving turning animals and people into monsters. Dante battles these mutants,
 through the cave in search of his brother.
     ​
 
-In this game you will find:
+## In this game you will find:
 
 - An entrancing story: join Dante as he discovers the secroets the cave holds.
 
@@ -36,4 +36,6 @@ dropped and used.
 - Adventure: Navigate through rooms, collect items, solve riddles and fight
 enemies to progress the levels and see what secrets the cave holds...​
 
-Simply run game.py to start
+![adventure screenshot](images/adventureScreenshot.png)
+
+## Simply run game.py to start
