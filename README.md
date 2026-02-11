@@ -38,4 +38,4 @@ enemies to progress the levels and see what secrets the cave holds...​
 
 ![adventure screenshot](images/adventureScreenshot.png)
 
-## Simply run game.py to start
+Run `python game.py` in your terminal to begin!
