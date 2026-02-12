@@ -267,7 +267,7 @@ brothers_journal={
 October 21, 2024 \n \n'Dear Diary, today has been great, I made so much progress on this project I have been working on and I can't wait to show it to my brother,
 I know for a fact that he will absolutely love it. I think I might go visit the cave today as well, remember?
 the same cave that dante and I used to go to when we were kids, oh how much it would upset our mum when we went,
-she used to be absolutely pissed but it was our safe space, our second home. 
+she used to be absolutely mad but it was our safe space, our second home. 
 Anyways, I'll keep you updated on my project!'
 
 A strange feeling now pulls you to the cave...

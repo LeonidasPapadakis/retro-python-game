@@ -12,8 +12,8 @@ house_0 = {
     "name": "Living Room",
 
     "description": """NEWS: 'Two more people have gone missing in the past 24 hours,
-      the police are not releasing any information on the matter.
-Is there a serial killer on the loose? or a mass kidnapping? I personally think-'
+    the police are not releasing any information on the matter.
+    Is there a serial killer on the loose? or a mass kidnapping? I personally think-'
 
 '3 days, 72 hours. My brother has been missing, no one knows where he is, is he dead?
 is he alive? we know nothing. I check my phone everyday, every second for a message from him,
@@ -74,7 +74,7 @@ room_2 = {
     "name": "Echoing Cavern",
 
     "description":"""A melancholy symphony of music and quiet fills the dimly lighted space. 
-    The stone walls echoed with every muttered secret. .You hear a growl from the right side of the room and turn around to find..... """,
+The stone walls echoed with every muttered secret. .You hear a growl from the right side of the room and turn around to find..... """,
 
     "exits":  {"west": "room3", "east": "room1"},
 
@@ -157,7 +157,7 @@ room_7 = {
 
     "description":
     """ You enter a shadowy chamber filled with faint echos of clanging metal,
-      where flickering torches cast eerie light on the rugged anvils and tools scattered throughout.""",
+where flickering torches cast eerie light on the rugged anvils and tools scattered throughout.""",
 
     "exits": {"south": "room8", "west": "room6"},
 
@@ -206,7 +206,7 @@ room_10 = {
 
     "description":
     """The air is heavy with the smell of wet dirt, and dark shadows lurk,
-      hinting at the horrors that previously lived behind its walls. As you descend, you reach a chamber characterized by jagged rocks and a terrible atmosphere.  """,
+hinting at the horrors that previously lived behind its walls. As you descend, you reach a chamber characterized by jagged rocks and a terrible atmosphere.  """,
 
     "exits": {"up": "room9", "west": "room11"},
 
@@ -320,7 +320,7 @@ room_17 = {
 
     "description":
     """The hiss of steam and the brilliance of an odd pulsing light filled the dark, empty chamber.
-      Looking down you see the same trail of golden liquid from the previous room. """,
+Looking down you see the same trail of golden liquid from the previous room. """,
 
     "exits": {"east": "room16", "down": "room18"},
 
@@ -451,9 +451,9 @@ room_25 = {
 
     "description":
     """A chill sweeps through the dimly lit room, a flickering fluorescent lamp casts erratic shadows on the cracked walls.
-      There is an ominous chalkboard with bizarre diagrams set to the right and in the center was Hans. 
-      People always said that he had a child like wonder in his eyes, right now however, his eyes are alight with manic excitement.
-      A stained lab coat and a syringe with golden liquid in his hand, Hans was bent over a person, ready to inject them with his creation. """,
+There is an ominous chalkboard with bizarre diagrams set to the right and in the center was Hans. 
+People always said that he had a child like wonder in his eyes, right now however, his eyes are alight with manic excitement.
+A stained lab coat and a syringe with golden liquid in his hand, Hans was bent over a person, ready to inject them with his creation. """,
 
     "exits": {"east": "room24"},
 

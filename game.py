@@ -192,7 +192,7 @@ def print_map():
                 if len(layout[x][y][0]) > largest:
                     largest = len(layout[x][y][0])
 
-        #loop through x again
+        #loop through x values
         for x in range(0, mapX):
             if layout[x][y] != 0:
 
@@ -356,10 +356,7 @@ def print_room_items(room):
             print(item["description"]+"\n")
 
 def combat(enemy):
-    global DoubleDamage
-    global paralysis_count
-    global Enemy_weakened
-    global ManaPower
+    global health
     global mana
     global current_room, previous_room, damage, message
     global in_combat
@@ -379,9 +376,9 @@ def combat(enemy):
     for item in inventory:
         if "damage" in item.keys():
             print("ATTACK "+item["id"].upper() + " to attack with your " + item["name"]+".")
-    #if mana>50:
-      #  print(f"USE mana to use 50 of you'r {mana} mana")
-
+    for item in inventory:
+        if "effects" in item.keys():
+            print("DRINK "+item['id'].upper()+" to drink a "+item["name"]+".")
     print("OPEN INV to take a look at your inventory")
     if enemy.name!="Hans":
         print("RUN to attempt an escape.")
@@ -404,101 +401,11 @@ def combat(enemy):
                 for item in inventory:
                     if user_input[1] == item["id"] and "damage" in item.keys():
                         found = True
-                        if user_input[1].lower()=="doubledamage":
-                            try:
-                                if ManaPower==True:
-                                    print("Cannot use potions as mana is currently being used")
-                                    time.sleep(1)
-                                    continue
-                            except:
-                                pass
-                            DoubleDamage=True
-                            inventory.remove(item)
-                            #recursive
-                            print("Double damage potion has been activated for current attack")
-                            
-                            time.sleep(1)
-                            continue  
-
-                        if user_input[1].lower()=="paralysispotion":
-                            try:
-                                if ManaPower==True:
-                                    print("Cannot use potions as mana is currently being used")
-                                    time.sleep(1)
-                                    continue
-                            except:
-                                pass
-                            paralysis_count=True
-                            inventory.remove(item)
-                            print(f"{enemy.name} has been poisoned by your paralysis potion, they will not be able to attack this turn")
-
-                            time.sleep(1)
-                            continue
-
-                        if user_input[1].lower()=="weakeningpotion":
-                            try:
-                                if ManaPower==True:
-                                    print("Cannot use potions as mana is currently being used")
-                                    time.sleep(1)
-                                    continue
-                            except:
-                                pass
-                            Enemy_weakened=True
-                            inventory.remove(item)
-                            print(f"{enemy.name}has been poisoned by your {user_input[1]}")
-                            continue                   
-                            try:
-                                
-                                time.sleep(1)
-                            except:
-                                pass
-
-                        if user_input[1].lower()=="paralysispotion":
-                            try:
-                                if ManaPower==True:
-                                    print("Cannot use potions as mana is currently being used")
-                                    time.sleep(1)
-                                    continue
-                            except:
-                                pass
-                            paralysis_count=True
-                            inventory.remove(item)
-                            print(f"{enemy.name} has been poisoned by your paralysis potion, they will not be able to attack this turn")
-                            
-                            time.sleep(1)
-                            continue
-
-                        if user_input[1].lower()=="weakeningpotion":
-                            try:
-                                if ManaPower==True:
-                                    print("Cannot use potions as mana is currently being used")
-                                    time.sleep(1)
-                                    continue
-                            except:
-                                pass
-                            Enemy_weakened=True
-                            inventory.remove(item)
-                            print(f"{enemy.name}has been poisoned by your {user_input[1]}")
-                            
-                            continue                   
-                            try:
-                               
-                                time.sleep(1)
-                            except:
-                                pass
-                    
-
-                    
-
 
                        #subtract item damage from enemies health
                         hit_damage = int(item["damage"] * damage)
-                        try:
-                            if ManaPower==True:
-                                hit_damage*=2.25
-                        except:
-                            pass
                         damage = 1.0
+
                         enemy.health = enemy.health - hit_damage
                         message.append("You attacked "+enemy.name+" with "+item["name"]
                                     +" and did "+str(hit_damage)+" damage!")
@@ -509,16 +416,11 @@ def combat(enemy):
 
                             current_room["npcs"].remove(enemy)
                             
-                            message.append(f"{enemy.name} has been defeated congratulations !!!")
-                            mana+=enemy.mana
-                            if mana>100:
-                                mana=100
-                            
+                            message.append(f"{enemy.name} has been defeated!")
                             
                             for item in enemy.items:
                                 current_room["items"].append(item)
                                 message.append(f"{enemy.name} has dropped {item['name']}")
-
 
                             #unlock exits if enemy has speech options
                             if enemy.speech != "":
@@ -535,18 +437,7 @@ def combat(enemy):
                                     enemy_previous_health=(npcs[enemy.name][1]["health"])
                                     enemy.health=enemy_previous_health
                         else:
-                            #if paralysis_count>=1 and therefore the user has used paralysis potion , the enemy will not be able to take their turn 
-                            try:
-                                if paralysis_count==True:
-                                    print("print paralysis count count")
-                                    paralysis_count=False
-                                    continue
-                            except:
-                                pass
                             enemy_attack(enemy)
-
-        
-                        
 
                         break
                         
@@ -557,6 +448,48 @@ def combat(enemy):
             else:
                 message.append("Attack with what?")
 
+        #potion options
+        elif user_input[0].lower() == "drink":
+
+            #if potion selected
+            if len(user_input) > 1:
+
+                #loop through inventory
+                found = False
+                for item in inventory:
+
+                    #if item is a potion and matches the potion selected
+                    if "effects" in item.keys() and user_input[1] == item["id"]:
+                        found = True
+
+                        #loop through and apply each potion effect
+                        for effect in item["effects"].keys():
+
+                            #health effects
+                            if effect == "health":
+
+                                #if drinking would put player over maximum health
+                                if health + item["effects"]["health"] > max_health:
+                                    health = max_health
+                                else:
+                                    health = health + item["effects"]["health"]
+
+                            #damage multiply effects
+                            elif effect == "damage":
+                                damage = damage * item["effects"]["damage"]
+
+                        #remove from inventory and break
+                        message.append("You drank a "+item["name"]+".")
+                        inventory.remove(item)
+                        break         
+                        
+                #if no matching potion found, print an error
+                if found == False:
+                    message.append("You cannot drink '"+user_input[1]+"'.")
+
+            else:
+                message.append("Drink what?")
+            
         #command to open inventory
         elif user_input[0].lower() == "open":
             if len(user_input) > 1:
@@ -565,7 +498,7 @@ def combat(enemy):
                     print_inventory_items(inventory)
                 else:
                     message.append("You cannot open '"+user_input[1]+"'.")
-   
+
 
         #if player chooses to escape, they have a chance to escape successfully,
         #or suffer an attack and remain in place
@@ -579,26 +512,10 @@ def combat(enemy):
                 previous_room = current_room
                 current_room = temp
 
-           
-
-
             #if unsuccessful, trigger an enemy attack
             else:
                 message.append("You tried to escape "+enemy.name+" but you were unsuccessful.")
                 enemy_attack(enemy)
-
-        elif user_input[0].lower()=="use":
-            if user_input[1].lower()=="mana":
-                if mana<50:
-                    print(f"You have {mana} mana , you need 50 mana to use mana attacks")
-                else:
-                    ManaPower=True
-                    print(ManaPower)
-                    mana-=50
-            else:
-                print("Use what")
-        
-
         else:
             message.append("This makes no sense.")
 
@@ -635,8 +552,6 @@ def speak_enemy(enemy):
             print_lines()
             input("> ")
         speech = ""
-
-        
             
         #loop through enemys speech options
         for index in range(0, len(enemy.speech["questions"])-1, 2):
@@ -764,8 +679,6 @@ def speak_merchant(player_items, merchant):
                                 merchant.items.remove(item)
                                 coins = coins - item["value"]
                                 
-                                
-                                
                                 message.append("You bought "+item["name"]+" for "
                                             +str(item["value"])+" coins")
                                 speak_merchant(inventory, merchant)
@@ -773,18 +686,9 @@ def speak_merchant(player_items, merchant):
                             else:
                                 message.append("You cannot afford this.")
                                 speak_merchant(inventory, merchant)
-
+                            
                             #break to avoid items being bought twice
                             break
-
-                            #add to player's inventory and remove from merchant's
-                            inventory.append(item)
-                            merchant.items.remove(item)
-                            coins = coins - item["value"]
-
-                            message.append("You bought "+item["name"]+" for "
-                                        +str(item["value"])+" coins")
-                            speak_merchant(inventory, merchant)
 
                         else:
                             message.append("Item is too heavy. Drop or sell something from your inventory.")
@@ -986,43 +890,16 @@ def print_inventory_items(items):
             if found == False:
                 message.append("You cannot drink '"+user_input[1]+"'.")
                 
-
-
-            
             print_inventory_items(inventory)
         
         else:
             message.append("Drink what?")
             print_inventory_items(inventory)
-        """
-        if user_input[1].lower() not in ["small","medium","large"]:
-            print("must specify size of potion you wish to consume e.g 'consume small healing potion' -- ")
-            time.sleep(1)
         
-
-        else:                
-            selected_healing_item=" ".join(user_input[1:])
-            print(selected_healing_item)
-            for item in inventory:
-                if item["name"]==selected_healing_item:
-                    if health>=100:
-                        print("You cannot heal health above 100 , you already have full health")
-                        print(f"Your health : {health}")
-                    else:
-                        health+=item["Health"]
-                        print(f"Your health has been increased by {item['Health']}")
-                        print(f"Your health is now : {health}")
-                        inventory.remove(item)
-                        #user cannot heal health above 100
-                        if health>100:
-                            health=100
-                            """
     #re-opens inventory if nothing is selected
     else:
         message.append("This makes no sense.")
-        print_inventory_items(inventory)
-
-                
+        print_inventory_items(inventory)        
 
 
 #function for printing npcs in a room
@@ -1051,30 +928,13 @@ def print_npcs(room):
 
 
 def print_room(room):
-    global Dialog    
-    global in_combat
+    
     print()
     print(room["name"].upper())
     print()
+
     # Display room description
     print(room["description"])
-
-    mp3list=[]
-    if Dialog==True and in_combat==False :
-        for mp3 in room["RoomAudio"]:
-            numOfMp3s=len(room["RoomAudio"])
-            
-            if len(mp3list)!=numOfMp3s and room["AudioPlayed"]==False:
-                mp3list.append(mp3)
-            if len(mp3list)==numOfMp3s:
-                room["AudioPlayed"]=True
-        if room["name"]=="The Puppet Master’s Theater":
-            PlayMultipleSongs(mp3list)
-            time.sleep(28)
-        else:
-            PlayMultipleSongs(mp3list)
-
-    
     print()
 
     print_room_items(room)
@@ -1350,35 +1210,6 @@ def move(exits, direction):
 
     # Next room to go to
     return floors[exits[direction]]
-
-"""
-#started enemy encounter function which takes argument of list of enemies in current room, implemented random , so user has a 2 in 3 guess of not 
-#encountering an enemy , so far only shows that the user encountered an enemy , combat will be added
-def enemy_encounter(enemies=current_room["enemies"]):
-    guess_for_enemy_encounter =random.randint(1,3)
-    while True:
-        try:
-            user_guess_for_encounter=int(input("enter a number between 1 and 3 "))
-        except:
-            print("must enter a number between 1 and 3")
-            continue
-        
-        if user_guess_for_encounter not in [1,2,3]:
-            print("must enter a number between 1 and 3")
-            continue
-        else:
-            break
-    if user_guess_for_encounter==guess_for_enemy_encounter:
-        random_enemy_choice=random.choice(enemies)
-        print(f"You've encountered a wild {random_enemy_choice['name']}")
-        print(random_enemy_choice["description"])
-    else:
-        print("you've not encountered an enemy")
-"""
-
-
-
-
 
 def boss_fight(npc):
     global Dialog
